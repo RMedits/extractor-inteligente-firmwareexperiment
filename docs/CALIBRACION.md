@@ -55,9 +55,9 @@ Los umbrales de humedad (`HUMIDITY_THRESHOLD_HIGH` y `HUMIDITY_THRESHOLD_LOW`) d
 
 ## 3. Ajuste Fino del PWM del Ventilador (Delta 12V)
 
-El firmware v6.0C mapea la velocidad del 1% al 100% a un rango de PWM de **51 a 255**. El valor mínimo de 51 (20%) es para asegurar que el motor Delta arranque correctamente y no se quede bloqueado.
+El firmware v6.6C mapea la velocidad del 1% al 100% a un rango de PWM de **80 a 255**. El valor mínimo de 80 (~31%) es para asegurar que el motor Delta arranque correctamente y no se quede bloqueado.
 
--   **Si el ventilador no arranca en la velocidad mínima**: Necesitas subir `PWM_MIN_VALUE` en `src/main.cpp`. Auméntalo a `60` o `70`.
+-   **Si el ventilador no arranca en la velocidad mínima**: Necesitas subir `PWM_MIN_VALUE` en `src/main.cpp`. Auméntalo a `90` o `100`.
 -   **Si el ventilador hace ruido eléctrico pero no gira**: Sube el valor mínimo.
 
-Para hacer el cambio, modifica la línea `#define PWM_MIN_VALUE 51` en `src/main.cpp`.
+Para hacer el cambio, modifica la línea `#define PWM_MIN_VALUE 80` en `src/main.cpp`.

@@ -33,12 +33,11 @@ ESP32Encoder encoder;
 #define BTN_BAK_PIN      26  
 
 // Actuadores
-#define RELAY_PIN    23  
-#define FAN_PWM_PIN  14  
+#define FAN_MOSFET_PIN  19  
 #define PWM_CHANNEL  0
 #define PWM_FREQUENCY 25000
 #define PWM_RESOLUTION 8
-#define PWM_MIN_VALUE 51   // 20%
+#define PWM_MIN_VALUE 80   // 31%
 #define PWM_MAX_VALUE 255  // 100%
 
 // LEDS Estado
@@ -106,9 +105,6 @@ void setup() {
   esp_task_wdt_init(WDT_TIMEOUT, true);
   esp_task_wdt_add(NULL);
 
-  pinMode(RELAY_PIN, OUTPUT);
-  digitalWrite(RELAY_PIN, LOW);
-  
   pinMode(LED_RED_PIN, OUTPUT);
   pinMode(LED_GREEN_PIN, OUTPUT);
   digitalWrite(LED_RED_PIN, HIGH); delay(300); digitalWrite(LED_RED_PIN, LOW);
@@ -119,7 +115,7 @@ void setup() {
   pinMode(BTN_BAK_PIN, INPUT_PULLUP);
 
   ledcSetup(PWM_CHANNEL, PWM_FREQUENCY, PWM_RESOLUTION);
-  ledcAttachPin(FAN_PWM_PIN, PWM_CHANNEL);
+  ledcAttachPin(FAN_MOSFET_PIN, PWM_CHANNEL);
   ledcWrite(PWM_CHANNEL, 0);
 
   ESP32Encoder::useInternalWeakPullResistors = UP;
@@ -337,8 +333,8 @@ void runLogic() {
 void controlFan(int percentage) {
   if (percentage == currentFanSpeed) return;
   currentFanSpeed = percentage;
-  if (percentage <= 0) { digitalWrite(RELAY_PIN, LOW); ledcWrite(PWM_CHANNEL, 0); }
-  else { digitalWrite(RELAY_PIN, HIGH); ledcWrite(PWM_CHANNEL, map(percentage, 1, 100, PWM_MIN_VALUE, PWM_MAX_VALUE)); }
+  if (percentage <= 0) { ledcWrite(PWM_CHANNEL, 0); }
+  else { ledcWrite(PWM_CHANNEL, map(percentage, 1, 100, PWM_MIN_VALUE, PWM_MAX_VALUE)); }
 }
 
 void updateDisplay() {

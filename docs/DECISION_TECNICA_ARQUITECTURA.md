@@ -15,7 +15,7 @@ Para este proyecto, hemos decidido estandarizar el control del ventilador utiliz
 - **Conexión:**
     - Drain MOSFET -> Negativo del Ventilador.
     - Source MOSFET -> GND Común.
-    - Gate MOSFET -> GPIO 14 (vía 220Ω).
+    - Gate MOSFET -> GPIO 19 (pulldown 10kΩ a GND).
 - **Lógica PWM:** **DIRECTA**
     - `PWM 0` (0%) -> MOSFET OFF -> Ventilador Apagado.
     - `PWM 255` (100%) -> MOSFET ON -> Ventilador a Máxima Potencia.

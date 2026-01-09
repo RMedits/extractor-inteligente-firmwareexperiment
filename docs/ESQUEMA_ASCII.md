@@ -39,31 +39,27 @@ PROYECTO: Extractor Inteligente (Delta 12V 2.7A)
 2. CIRCUITO DE POTENCIA (Ventilador Delta 12V)
 ================================================================================
 
-   [ ESP32 ]          [ RELE KY-019 ]
-   ---------          ---------------
-   GPIO 23  --------> S (Signal)
-   5V       --------> + (VCC)
-   GND      --------> - (GND)
-
    [ ESP32 ]          [ MOSFET FQP30N06L ]
    ---------          --------------------
-   GPIO 14  --[220R]-- Gate (Pin 1)
+   GPIO 19  --------- Gate (Pin 1)
                         |
                       [10K] (Resistencia Pulldown)
+                        |
+                       GND
+                      [100nF] (Opcional, cable largo)
                         |
                        GND
 
    [ ESQUEMA DE CARGA (12V) ]
    --------------------------
-   FUENTE 12V (+) ------> RELE COM
-                          RELE NO ------> VENTILADOR (+)
-                                          VENTILADOR (-) --+--> MOSFET DRAIN (Pin 2)
-                                                           |
-                                                   [DIODO 1N5408] (Flyback)
-                                                           |
-   FUENTE 12V (-) -----------------------------------------+--> MOSFET SOURCE (Pin 3)
-                                                                |
-                                                               GND (Comun)
+   FUENTE 12V (+) -------------------------------------> VENTILADOR (+)
+                                                       VENTILADOR (-) --+--> MOSFET DRAIN (Pin 2)
+                                                                        |
+                                                                [DIODO 1N5408] (Flyback)
+                                                                        |
+   FUENTE 12V (-) ------------------------------------------------------+--> MOSFET SOURCE (Pin 3)
+                                                                             |
+                                                                            GND (Comun)
 
 ================================================================================
 3. NOTAS DE MONTAJE CRITICAS
@@ -71,4 +67,5 @@ PROYECTO: Extractor Inteligente (Delta 12V 2.7A)
 - DIODO 1N5408: Instalar en paralelo al ventilador. La franja (catodo) va al positivo.
 - MOSFET: El pinout del FQP30N06L visto de frente es 1:Gate, 2:Drain, 3:Source.
 - RESISTENCIAS: La de 10K debe ir lo mas cerca posible del Gate del MOSFET.
+- PWM AZUL: El cable PWM azul del ventilador queda desconectado (aislar).
 - GND: El GND de la fuente de 12V debe estar unido al GND del ESP32.

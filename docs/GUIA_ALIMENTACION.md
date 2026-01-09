@@ -5,7 +5,7 @@ Esta guía detalla los requisitos de alimentación para el proyecto v6.0C. El si
 ## 1. Circuito de Lógica (5V)
 Este circuito alimenta el "cerebro" y los sensores.
 
-- **Componentes**: ESP32, OLED, BME280, MQ135, Bobina del Relé KY-019.
+- **Componentes**: ESP32, OLED, BME280, MQ135 y lógica de control.
 - **Fuente Recomendada**: Cargador de móvil USB de buena calidad (5V / 1A mínimo).
 - **Conexión**: Puerto USB del ESP32 o pin Vin (5V) de la placa de expansión.
 

@@ -42,15 +42,11 @@ Este módulo centraliza la pantalla y todos los controles de usuario.
 
 ## 3. Control de Potencia (Ventilador Delta 12V)
 
-### Relé KY-019 (Seguridad/Corte General)
-- **S (Señal):** GPIO 23
-- **+ (VCC):** 5V
-- **- (GND):** GND
-
 ### MOSFET FQP30N06L (Control PWM)
-- **GATE (Pin 1):** Conectado a **GPIO 14** a través de resistencia de 220Ω.
+- **GATE (Pin 1):** Conectado a **GPIO 19**.
 - **DRAIN (Pin 2):** Conectado al **NEGATIVO (-)** del Ventilador.
 - **SOURCE (Pin 3):** Conectado a **GND**.
+- **Nota:** El cable PWM azul del ventilador debe quedar **desconectado** (control por potencia).
 
 ### LEDs de Estado Externos (Opcionales)
 - **LED Rojo (Standby/Error):** Ánodo a **GPIO 4** (vía 220Ω), Cátodo a GND.
@@ -61,7 +57,7 @@ Este módulo centraliza la pantalla y todos los controles de usuario.
 ## 4. Componentes de Protección y Estabilidad
 - **Diodo 1N5408:** En paralelo con el ventilador (Cátodo a 12V+, Ánodo a Ventilador-).
 - **Resistencia 10kΩ:** Entre GATE del MOSFET y GND (Pulldown obligatorio).
-- **Resistencia 220Ω:** Para el GATE del MOSFET y para el LED de estado.
+- **Capacitor 100nF:** Entre GATE y SOURCE si el cable de control es largo (anti-ruido).
 
 ---
 
