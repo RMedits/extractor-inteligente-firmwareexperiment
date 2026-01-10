@@ -21,7 +21,7 @@ graph TD
     end
 
     subgraph "Salidas"
-        D(Relé / MOSFET)
+        D(MOSFET)
         E
         F
     end

@@ -13,10 +13,9 @@ graph TD
 
     subgraph "Circuito de Potencia"
         D[Fuente 12V / 4A]
-        D -- "+12V" --> E{Rele KY-019};
-        E -- "+12V Switch" --> F((Ventilador Delta 2.7A));
+        D -- "+12V" --> F((Ventilador Delta 2.7A));
         D -- "GND" --> G2(GND);
-        F -- "Retorno PWM" --> M[MOSFET FQP30N06L];
+        F -- "Negativo Ventilador" --> M[MOSFET FQP30N06L];
         M -- "GND" --> G2;
     end
 

@@ -7,8 +7,9 @@ La correcta disposición física de los componentes es fundamental para el buen 
 La regla más importante es **separar la electrónica de potencia (12V) de la electrónica de control y sensores (3.3V/5V)**.
 
 - **Carcasa/Caja**: Se recomienda montar todo dentro de una caja de plástico.
-- **Zonas**: Crea una "Zona de Potencia" (Relé, MOSFET, 12V) y una "Zona de Control" (ESP32, Sensores).
+- **Zonas**: Crea una "Zona de Potencia" (MOSFET, diodo, 12V) y una "Zona de Control" (ESP32, Sensores).
 - **GND Común**: Es obligatorio que el negativo (-) de la fuente de 12V y el GND del ESP32 estén unidos en un solo punto.
+- **Cable largo**: Si el MOSFET queda a ~1m del ESP32, ubícalo cerca del ventilador para acortar el tramo de potencia.
 
 ---
 
@@ -18,9 +19,9 @@ El MOSFET controla la velocidad del ventilador mediante PWM.
 
 - **Ubicación de Resistencias**:
     - **Resistencia 10kΩ (Pulldown)**: DEBE ir soldada o conectada lo más cerca posible de los pines **Gate** y **Source** del MOSFET. Esto evita que el ventilador se encienda solo por ruido estático.
-    - **Resistencia 220Ω**: Entre el pin Gate del MOSFET y el cable que viene del GPIO 14.
+    - **Capacitor 100nF (opcional)**: Entre Gate y Source si el cable de control es largo (anti-ruido).
 - **Pinout (Visto de frente, letras hacia ti)**:
-    1. **Gate** (Izquierda) -> GPIO 14 (vía 220Ω)
+    1. **Gate** (Izquierda) -> GPIO 19
     2. **Drain** (Centro/Tab) -> Negativo del Ventilador
     3. **Source** (Derecha) -> GND Común
 - **Disipación**: Aunque el FQP30N06L aguanta 30A, con el ventilador Delta de 2.7A se recomienda usar un pequeño disipador de aluminio TO-220 si va a funcionar por periodos largos.
@@ -58,3 +59,5 @@ El módulo Estardyn facilita el montaje:
 ## 6. Longitud de Cables
 - **I2C (OLED/BME280)**: Máximo 25cm. Si el cable es muy largo, la pantalla puede mostrar basura o el sensor fallar.
 - **Potencia**: Usa cable de calibre 18 AWG o similar para los 12V del ventilador.
+- **Control MOSFET**: Para distancias de ~1m, usa par trenzado o cable apantallado para GPIO19/GND.
+- **PWM azul del ventilador**: Debe quedar desconectado y aislado con termoretráctil.

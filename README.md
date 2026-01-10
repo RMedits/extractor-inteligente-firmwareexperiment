@@ -16,9 +16,10 @@ Sistema de extracción automatizado basado en ESP32 para baño o galería, optim
 - **Microcontrolador:** ESP32-WROOM-32 (38 pines + Shield).
 - **Sensores:** Módulo Dual AHT20+BMP280 (I2C) + MQ135 (Analógico).
 - **Control:** Módulo OLED Estardyn con Encoder y 2 botones extra.
-- **Actuadores:** Relé KY-019 (Corte) + MOSFET FQP30N06L (PWM Potencia).
+- **Actuadores:** MOSFET FQP30N06L (PWM de potencia directa).
 - **Ventilador:** Delta QFR1212GHE (12V, 2.70A).
-- **Protección:** Diodo 1N5408 + Resistencias Pulldown.
+- **Protección:** Diodo 1N5408 + resistencia pull-down 10kΩ (Gate → GND).
+- **Nota crítica:** El cable PWM azul del ventilador queda desconectado (control por potencia).
 
 ## 📌 Pinout Resumido
 | Componente | Pin ESP32 | Función |
@@ -27,9 +28,13 @@ Sistema de extracción automatizado basado en ESP32 para baño o galería, optim
 | **Encoder** | TRA: 32 / TRB: 33 / PUSH: 27 | Control Usuario |
 | **Botones** | BACK: 25 / PAUSA: 26 | Control Usuario |
 | **MQ135** | 34 | Calidad Aire (Analógico) |
-| **Relé** | 23 | Corte de Energía |
-| **MOSFET** | 14 | PWM Ventilador |
+| **MOSFET** | 19 | PWM Ventilador |
 | **LEDs** | Rojo: 4 / Verde: 15 | Estado Sistema |
+
+## 📚 Documentación clave
+- `docs/GUIA_MIGRACION_MOSFET.md` (migración relé → MOSFET)
+- `docs/html/cableado_mosfet_remoto.html` (diagrama remoto a 1 metro)
+- `docs/html/configuracion_personalizada.html` (layout personalizado)
 
 ## 💻 Instalación
 1. Clonar este repositorio.

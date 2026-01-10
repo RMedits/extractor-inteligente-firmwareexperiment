@@ -20,8 +20,7 @@ Este montaje utiliza un ventilador de alta potencia. Es **OBLIGATORIO** el uso d
 | **GPIO 25** | Botón CONFIRM | BACK | Botón físico lateral |
 | **GPIO 26** | Botón BAK | PAUSE | Botón físico lateral (2s) |
 | **GPIO 34** | Sensor MQ135 | AOUT | Analógico (Calidad Aire) |
-| **GPIO 23** | Relé KY-019 | Signal (S) | Corte general seguridad |
-| **GPIO 14** | MOSFET Gate | PWM | Control velocidad |
+| **GPIO 19** | MOSFET Gate | PWM | Control velocidad |
 | **GPIO 4**  | LED Rojo | Ánodo (+) | Error / Standby |
 | **GPIO 15** | LED Verde | Ánodo (+) | Funcionamiento OK |
 
@@ -30,13 +29,14 @@ Este montaje utiliza un ventilador de alta potencia. Es **OBLIGATORIO** el uso d
 ## 2. Circuito de Potencia (12V)
 
 ### MOSFET FQP30N06L
-- **PIN 1 (Gate):** GPIO 14 (vía resistencia 220Ω). *Añadir Pulldown 10kΩ a GND*.
+- **PIN 1 (Gate):** GPIO 19. *Añadir Pulldown 10kΩ a GND*.
 - **PIN 2 (Drain):** Cable NEGATIVO (-) del Ventilador.
 - **PIN 3 (Source):** GND Común (Negativo fuente 12V).
 
-### Relé KY-019
-- **COM:** Entrada +12V de la fuente.
-- **NO (Normalmente Abierto):** Salida hacia el cable POSITIVO (+) del Ventilador.
+### Ventilador (Potencia Directa)
+- **Cable ROJO (+):** +12V directo desde la fuente.
+- **Cable NEGRO (-):** Drain del MOSFET.
+- **Cable PWM azul:** Desconectado (aislar con termoretráctil).
 
 ### Protección (Diodo 1N5408)
 - **Cátodo (Franja):** Al cable POSITIVO del ventilador.

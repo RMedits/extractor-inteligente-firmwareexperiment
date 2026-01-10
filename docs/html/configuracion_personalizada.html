@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Configuración Personalizada</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #16213e;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        h1 {
+            text-align: center;
+            color: #00d4ff;
+            margin-bottom: 30px;
+        }
+        .layout {
+            position: relative;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            min-height: 600px;
+        }
+        .component {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .component h3 {
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .component-fan {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+        }
+        .component-power {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            border: 3px solid #ffd700;
+        }
+        .component-sensor {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+        }
+        .component-esp32 {
+            background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);
+        }
+        .distance {
+            text-align: center;
+            font-size: 1.5em;
+            color: #00d4ff;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        .arrow {
+            text-align: center;
+            font-size: 2em;
+            color: #ffd700;
+        }
+        .detail-box {
+            background: rgba(0,0,0,0.4);
+            border-left: 4px solid #00d4ff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .warning {
+            background: rgba(255,152,0,0.2);
+            border: 2px solid #FF9800;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .success {
+            background: rgba(76,175,80,0.2);
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .materials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .material-item {
+            background: rgba(0,212,255,0.1);
+            border: 1px solid #00d4ff;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .material-item h4 {
+            margin: 0 0 10px 0;
+            color: #00d4ff;
+        }
+        code {
+            background: rgba(0,0,0,0.5);
+            padding: 2px 8px;
+            border-radius: 3px;
+            color: #ffd700;
+            font-family: 'Courier New', monospace;
+        }
+        .highlight {
+            color: #ffd700;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏗️ Tu Configuración Personalizada</h1>
+        <p style="text-align: center; color: #aaa;">Basado en las medidas de tu instalación real</p>
+
+        <div class="layout">
+            <!-- VENTILADOR -->
+            <div class="component component-fan">
+                <h3>🌪️ VENTILADOR (Techo)</h3>
+                <div class="detail-box">
+                    <strong>Delta QFR1212GHE</strong><br>
+                    Alimentación: 12V / 2.7A<br><br>
+                    <strong>Conexiones:</strong><br>
+                    • Cable ROJO (+) → Mantener hacia fuente<br>
+                    • Cable NEGRO (-) → <span class="highlight">Cortar y reconectar a MOSFET Drain</span><br>
+                    • Cable AZUL (PWM) → ❌ Aislar con termoretráctil<br>
+                    • Cable AMARILLO → ❌ Dejar libre
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+            <div class="distance">📏 100 cm</div>
+            <div class="arrow">↓</div>
+
+            <!-- ZONA FUENTE + MOSFET -->
+            <div class="component component-power">
+                <h3>⚡ FUENTE (+/-) + ZONA MOSFET ← MONTAR AQUÍ</h3>
+                
+                <div class="detail-box">
+                    <strong>🔧 Componentes a Montar en esta Zona:</strong><br><br>
+                    
+                    <strong>1. Tu Placa de Filtrado (Ya tienes):</strong><br>
+                    • Capacitor 470µF 50V<br>
+                    • Capacitor 100nF (104)<br>
+                    • Diodo 1N5408<br>
+                    • Entrada: +12V / GND desde fuente<br>
+                    • Salida: +12V filtrado<br><br>
+
+                    <strong>2. MOSFET FQP30N06L (Nuevo):</strong><br>
+                    • <code>Pin 1 (Gate)</code>: Cable desde ESP32 GPIO19<br>
+                    • <code>Pin 2 (Drain)</code>: Cable NEGRO del ventilador<br>
+                    • <code>Pin 3 (Source)</code>: GND común<br><br>
+
+                    <strong>3. Componentes de Protección:</strong><br>
+                    • Resistencia 10kΩ: Gate → GND (Fail-Safe)<br>
+                    • Capacitor 100nF: Gate → Source (Anti-ruido)<br>
+                </div>
+
+                <div class="success">
+                    ✅ <strong>Ventajas de esta ubicación:</strong><br>
+                    • Cable corto al ventilador (100 cm, pérdida mínima)<br>
+                    • Alejado de sensores (minimiza EMI)<br>
+                    • Fácil acceso para montaje y mantenimiento<br>
+                    • Aprovechas la infraestructura existente
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+            <div class="distance">📏 45 cm</div>
+            <div class="arrow">↓</div>
+
+            <!-- SENSOR -->
+            <div class="component component-sensor">
+                <h3>📊 ZONA SENSORES</h3>
+                <div class="detail-box">
+                    • BME280 / AHT20 (I2C)<br>
+                    • MQ135 (Analógico)<br>
+                    • Módulo OLED + Controles<br><br>
+                    <span style="color: #4CAF50;">✓ A 45 cm del MOSFET: lejos de ruido electromagnético</span>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+            <div class="distance">📏 35 cm</div>
+            <div class="arrow">↓</div>
+
+            <!-- ESP32 -->
+            <div class="component component-esp32">
+                <h3>🖥️ ESP32 DevKit</h3>
+                <div class="detail-box">
+                    <strong>Salidas al MOSFET (80 cm total):</strong><br>
+                    • <code>GPIO19</code> → Gate del MOSFET<br>
+                    • <code>GND</code> → Source del MOSFET<br><br>
+                    
+                    <span class="highlight">Cable requerido:</span><br>
+                    Par trenzado o cable apantallado de 2 conductores
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTA DE MATERIALES -->
+        <h2 style="color: #00d4ff; margin-top: 40px;">🛒 Lista de Materiales Necesarios</h2>
+        
+        <div class="materials">
+            <div class="material-item">
+                <h4>Electrónica</h4>
+                • MOSFET FQP30N06L x1<br>
+                • Resistencia 10kΩ 1/4W x1<br>
+                • Capacitor 100nF cerámico x1<br>
+                • (Ya tienes placa con 470µF y diodo)
+            </div>
+
+            <div class="material-item">
+                <h4>Cableado</h4>
+                • Cable par trenzado 2 conductores<br>
+                  ~1 metro (GPIO19 + GND)<br>
+                • Cable AWG 22 para reconectar<br>
+                  ventilador negro a MOSFET
+            </div>
+
+            <div class="material-item">
+                <h4>Accesorios</h4>
+                • Termoretráctil variado<br>
+                • Caja pequeña o soporte<br>
+                  para montar MOSFET<br>
+                • Conectores/terminales según<br>
+                  tu método de conexión
+            </div>
+        </div>
+
+        <!-- INSTRUCCIONES DE MONTAJE -->
+        <h2 style="color: #00d4ff; margin-top: 40px;">🔧 Pasos de Montaje</h2>
+
+        <div class="warning">
+            <strong>⚠️ ANTES DE EMPEZAR:</strong><br>
+            1. Desconectar TODA la alimentación (12V y ESP32)<br>
+            2. Descargar capacitores (cortocircuitar terminales con resistencia)<br>
+            3. Trabajar con buena iluminación
+        </div>
+
+        <div class="detail-box">
+            <strong>Paso 1: Preparar MOSFET</strong><br>
+            • Soldar resistencia 10kΩ entre Gate (pin 1) y Source (pin 3)<br>
+            • Soldar capacitor 100nF entre Gate y Source<br>
+            • Verificar con multímetro: Gate-Source debe medir ~10kΩ
+        </div>
+
+        <div class="detail-box">
+            <strong>Paso 2: Montar en Zona Fuente (+/-)</strong><br>
+            • Fijar MOSFET cerca de tu placa de filtrado<br>
+            • Usar caja pequeña o brida para asegurar<br>
+            • Dejar pines accesibles para conexiones
+        </div>
+
+        <div class="detail-box">
+            <strong>Paso 3: Reconectar Ventilador</strong><br>
+            • Localizar cable NEGRO del ventilador (actualmente va a fuente GND)<br>
+            • <span class="highlight">Cortarlo</span> y conectar al <code>Drain (pin 2)</code> del MOSFET<br>
+            • Cable ROJO del ventilador mantiene su conexión a +12V
+        </div>
+
+        <div class="detail-box">
+            <strong>Paso 4: Conectar MOSFET a GND</strong><br>
+            • Source del MOSFET (pin 3) → GND común de la fuente<br>
+            • Usar cable de calibre adecuado (AWG 22 mínimo)
+        </div>
+
+        <div class="detail-box">
+            <strong>Paso 5: Tender Cables desde ESP32</strong><br>
+            • Pasar cable par trenzado de 2 conductores (~1m)<br>
+            • Conductor 1: ESP32 GPIO19 → MOSFET Gate (pin 1)<br>
+            • Conductor 2: ESP32 GND → MOSFET Source (pin 3)<br>
+            • Mantener cables alejados de fuente 12V (ruido)
+        </div>
+
+        <div class="detail-box">
+            <strong>Paso 6: Aislar Cables No Usados</strong><br>
+            • Cable AZUL (PWM) del ventilador: cubrir con termoretráctil<br>
+            • Cable AMARILLO (Tacho): dejar libre o aislar
+        </div>
+
+        <!-- TEST DE SEGURIDAD -->
+        <h2 style="color: #00d4ff; margin-top: 40px;">🧪 Test de Seguridad (Fail-Safe)</h2>
+
+        <div class="success">
+            <strong>Test 1: Verificación Eléctrica (sin alimentar)</strong><br>
+            Con multímetro:<br>
+            • Gate-Source debe medir ~10kΩ (resistencia pull-down)<br>
+            • Drain-Source debe medir circuito abierto (MOSFET OFF)<br>
+            • +12V y GND deben tener continuidad con fuente<br><br>
+
+            <strong>Test 2: Fail-Safe (ESP32 apagado)</strong><br>
+            1. Dejar ESP32 desconectado/apagado<br>
+            2. Aplicar 12V a la fuente<br>
+            3. <span class="highlight">Resultado esperado: Ventilador APAGADO</span><br>
+            4. Si arranca → ⚠️ ERROR: revisar pull-down<br><br>
+
+            <strong>Test 3: Control Manual (ESP32 encendido)</strong><br>
+            1. Cargar código del firmware<br>
+            2. Encender ESP32<br>
+            3. Verificar en Monitor Serial: "✓ MOSFET inicializado"<br>
+            4. Probar modo manual: ventilador debe arrancar y variar velocidad
+        </div>
+
+        <!-- TROUBLESHOOTING -->
+        <h2 style="color: #00d4ff; margin-top: 40px;">🔍 Solución de Problemas</h2>
+
+        <div class="warning">
+            <strong>Problema: Ventilador arranca sin ESP32</strong><br>
+            • Causa: Resistencia pull-down mal conectada o ausente<br>
+            • Solución: Verificar 10kΩ entre Gate y GND con multímetro<br><br>
+
+            <strong>Problema: Ventilador no arranca con código</strong><br>
+            • Causa: GPIO19 no llega al Gate, o conexión pobre<br>
+            • Solución: Verificar continuidad ESP32 GPIO19 → MOSFET Gate<br><br>
+
+            <strong>Problema: MOSFET se calienta mucho</strong><br>
+            • Causa: Mala conexión en Drain o Source (resistencia parásita)<br>
+            • Solución: Rehacer conexiones de potencia con cable grueso<br><br>
+
+            <strong>Problema: Velocidad errática o ruido</strong><br>
+            • Causa: Ruido en señal de Gate por cable largo<br>
+            • Solución: Verificar capacitor 100nF Gate-Source, usar cable apantallado
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; color: #666;">
+            <p>Esquema Personalizado v6.2 - Extractor Inteligente</p>
+            <p>Basado en tu layout: 100cm + 45cm + 35cm</p>
+        </div>
+    </div>
+</body>
+</html>

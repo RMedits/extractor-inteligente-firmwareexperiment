@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cableado MOSFET Remoto</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(0,0,0,0.7);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        h1 {
+            text-align: center;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        .zone {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .zone-esp32 { border-color: #4CAF50; }
+        .zone-mosfet { border-color: #FF9800; }
+        .zone-fan { border-color: #2196F3; }
+        .zone h2 {
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cable {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+        }
+        .cable-line {
+            flex: 1;
+            height: 3px;
+            background: repeating-linear-gradient(
+                to right,
+                currentColor,
+                currentColor 10px,
+                transparent 10px,
+                transparent 20px
+            );
+            margin: 0 10px;
+        }
+        .cable-power { color: #f44336; }
+        .cable-signal { color: #00bcd4; }
+        .cable-ground { color: #9e9e9e; }
+        .component {
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .component-esp32 { border-color: #4CAF50; }
+        .component-mosfet { border-color: #FF9800; }
+        .component-fan { border-color: #2196F3; }
+        .warning {
+            background: rgba(255,193,7,0.2);
+            border: 2px solid #FFC107;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .warning::before {
+            content: "⚠️ ";
+            font-size: 1.5em;
+        }
+        .success {
+            background: rgba(76,175,80,0.2);
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .success::before {
+            content: "✅ ";
+            font-size: 1.5em;
+        }
+        code {
+            background: rgba(0,0,0,0.5);
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #ffd700;
+        }
+        .specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .spec-item {
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #00bcd4;
+        }
+        .distance {
+            text-align: center;
+            font-size: 1.2em;
+            color: #FFC107;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔌 Configuración MOSFET Remoto (1 metro)</h1>
+        
+        <div class="success">
+            <strong>Configuración Óptima:</strong> MOSFET junto al ventilador para minimizar pérdidas de potencia.
+        </div>
+
+        <!-- ZONA ESP32 -->
+        <div class="zone zone-esp32">
+            <h2>🖥️ ZONA ESP32 + SENSORES</h2>
+            
+            <div class="component component-esp32">
+                <strong>ESP32 DevKit</strong>
+                <div style="margin-top: 10px;">
+                    📍 <code>GPIO19</code> → Señal PWM al MOSFET Gate<br>
+                    📍 <code>GND</code> → Tierra común del sistema
+                </div>
+            </div>
+
+            <div class="component component-esp32">
+                <strong>Placa de Filtrado</strong>
+                <div style="margin-top: 10px;">
+                    • Capacitor 470µF 50V<br>
+                    • Capacitor 100nF<br>
+                    • Diodo 1N5408 (flyback)
+                </div>
+                <div style="margin-top: 10px; color: #4CAF50;">
+                    ✓ Entrada: +12V desde fuente<br>
+                    ✓ Salida: +12V filtrado → Cable largo al ventilador
+                </div>
+            </div>
+
+            <div class="component component-esp32">
+                <strong>Sensores</strong>
+                <div style="margin-top: 10px;">
+                    BME280 / AHT20 (I2C)<br>
+                    MQ135 (Analógico)<br>
+                    Módulo OLED + Controles
+                </div>
+            </div>
+        </div>
+
+        <!-- CABLES -->
+        <div style="margin: 30px 0;">
+            <div class="distance">↓↓↓ ~1 METRO DE DISTANCIA ↓↓↓</div>
+            
+            <div class="cable cable-power">
+                <span>🔴 +12V (AWG 20-22)</span>
+                <div class="cable-line"></div>
+                <span>2.7A máx</span>
+            </div>
+
+            <div class="cable cable-signal">
+                <span>🔵 GPIO19 (Cable apantallado)</span>
+                <div class="cable-line"></div>
+                <span>Señal PWM 25kHz</span>
+            </div>
+
+            <div class="cable cable-ground">
+                <span>⚫ GND Común (AWG 20-22)</span>
+                <div class="cable-line"></div>
+                <span>Retorno de corriente</span>
+            </div>
+
+            <div class="warning">
+                <strong>Precauciones para cables largos:</strong><br>
+                • Usar cable apantallado o par trenzado para GPIO19<br>
+                • Mantener cables de señal separados de cables de potencia<br>
+                • Cable de potencia grueso (AWG 20 mínimo) para reducir pérdidas<br>
+                • Verificar que GND sea común entre ESP32 y MOSFET
+            </div>
+        </div>
+
+        <!-- ZONA MOSFET + VENTILADOR -->
+        <div class="zone zone-mosfet">
+            <h2>⚡ ZONA MOSFET (junto al ventilador)</h2>
+            
+            <div class="component component-mosfet">
+                <strong>MOSFET FQP30N06L</strong>
+                <div style="margin-top: 10px;">
+                    📌 <strong>Pin 1 (Gate):</strong><br>
+                    &nbsp;&nbsp;&nbsp;← GPIO19 del ESP32 (cable apantallado 1m)<br>
+                    &nbsp;&nbsp;&nbsp;← Resistencia 10kΩ a GND (pull-down)<br>
+                    &nbsp;&nbsp;&nbsp;← Capacitor 100nF a Source (filtro ruido)<br><br>
+                    
+                    📌 <strong>Pin 2 (Drain):</strong><br>
+                    &nbsp;&nbsp;&nbsp;← Cable NEGRO del ventilador (< 30 cm)<br><br>
+                    
+                    📌 <strong>Pin 3 (Source):</strong><br>
+                    &nbsp;&nbsp;&nbsp;→ GND común (cable 1m desde ESP32)
+                </div>
+            </div>
+
+            <div class="specs">
+                <div class="spec-item">
+                    <strong>Resistencia Pull-Down</strong><br>
+                    10kΩ (1/4W)<br>
+                    Gate → GND
+                </div>
+                <div class="spec-item">
+                    <strong>Capacitor Filtro</strong><br>
+                    100nF cerámico<br>
+                    Gate → Source
+                </div>
+            </div>
+
+            <div class="success">
+                <strong>Componentes críticos en esta zona:</strong><br>
+                1. MOSFET FQP30N06L<br>
+                2. Resistencia 10kΩ (Fail-Safe)<br>
+                3. Capacitor 100nF (Anti-ruido en cable largo)
+            </div>
+        </div>
+
+        <!-- ZONA VENTILADOR -->
+        <div class="zone zone-fan">
+            <h2>🌪️ ZONA VENTILADOR</h2>
+            
+            <div class="component component-fan">
+                <strong>Ventilador Delta QFR1212GHE</strong>
+                <div class="specs" style="margin-top: 10px;">
+                    <div class="spec-item">
+                        <strong>Cable ROJO (+)</strong><br>
+                        Conectar a +12V<br>
+                        (desde placa filtrado)
+                    </div>
+                    <div class="spec-item">
+                        <strong>Cable NEGRO (-)</strong><br>
+                        Conectar a MOSFET Drain<br>
+                        Cable corto (< 30 cm)
+                    </div>
+                </div>
+                <div class="specs" style="margin-top: 10px;">
+                    <div class="spec-item">
+                        <strong>Cable AZUL (PWM)</strong><br>
+                        ❌ DESCONECTADO<br>
+                        (Aislar con termoretráctil)
+                    </div>
+                    <div class="spec-item">
+                        <strong>Cable AMARILLO</strong><br>
+                        ❌ DESCONECTADO<br>
+                        (Opcional: tacómetro futuro)
+                    </div>
+                </div>
+            </div>
+
+            <div class="distance" style="color: #4CAF50;">
+                ↑ < 30 cm entre MOSFET y Ventilador ↑
+            </div>
+        </div>
+
+        <!-- LISTA DE MATERIALES -->
+        <div class="warning">
+            <strong>📋 Lista de Materiales Adicionales:</strong><br><br>
+            Para cables de ~1 metro:<br>
+            • Cable apantallado o par trenzado 2 conductores (1.5m)<br>
+            • Cable de potencia AWG 20-22, 2 conductores (1.5m)<br>
+            • Capacitor cerámico 100nF (código 104) x1<br>
+            • Resistencia 10kΩ 1/4W x1 (ya lo tienes)<br>
+            • Termoretráctil para aislar cables no usados del ventilador<br>
+            • Caja pequeña o soporte para montar MOSFET + componentes
+        </div>
+
+        <!-- CHECKLIST -->
+        <div class="success">
+            <strong>✅ Checklist de Montaje:</strong><br><br>
+            1. Montar MOSFET + R 10kΩ + C 100nF en caja/soporte<br>
+            2. Colocar conjunto a < 30 cm del ventilador<br>
+            3. Conectar cable NEGRO ventilador → MOSFET Drain (corto)<br>
+            4. Tender cables desde ESP32 (1m): +12V, GND, GPIO19<br>
+            5. Conectar cable apantallado GPIO19 → MOSFET Gate<br>
+            6. Verificar continuidad Gate-GND = ~10kΩ<br>
+            7. Test Fail-Safe: ventilador OFF con ESP32 apagado<br>
+            8. Cargar código y probar control PWM
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; color: #9e9e9e;">
+            <p>Diagrama v6.2 - MOSFET Remoto para Extractor Inteligente</p>
+        </div>
+    </div>
+</body>
+</html>
